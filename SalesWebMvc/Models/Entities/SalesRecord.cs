@@ -1,4 +1,6 @@
-﻿namespace SalesWebMvc.Models.Entities
+﻿using SalesWebMvc.Models.Entities.Enums;
+
+namespace SalesWebMvc.Models.Entities
 {
     public class SalesRecord
     {
@@ -7,7 +9,6 @@
         public double Amount { get; set; }
         public SaleStatus Status { get; set; }
         public Seller Seller { get; set; }
-        public ICollection<Seller>  SellerId { get; set; }
         public SalesRecord()
         {
         }

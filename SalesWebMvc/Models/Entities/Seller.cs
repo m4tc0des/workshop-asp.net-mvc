@@ -1,4 +1,8 @@
-﻿namespace SalesWebMvc.Models.Entities
+﻿using System.Collections.Generic;
+using System.Transactions;
+using System.Linq;
+
+namespace SalesWebMvc.Models.Entities
 {
     public class Seller
     {
@@ -7,8 +11,8 @@
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
         public double BaseSalary { get; set; }
-        public Department Department { get; set; }
-        public int DepartmentId { get; set; }
+        public Department Department { get; set;}
+        public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
         public Seller()
         {
         }
@@ -20,6 +24,18 @@
             BirthDate = birthDate;
             BaseSalary = baseSalary;
             Department = department;
+        }
+        public void AddSales(SalesRecord sr)
+        {
+            Sales.Add(sr);
+        }
+        public void RemoveSales(SalesRecord sr)
+        {
+            Sales.Add(sr);
+        }
+        public double TotalSales(DateTime initial, DateTime final) 
+        {
+            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount);
         }
     }
 }
