@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebMvc.Data;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // importante se ainda não tiver
 
 namespace SalesWebMvc
 {
@@ -17,17 +16,34 @@ namespace SalesWebMvc
             builder.Services.AddDbContext<SalesWebMvcContext>(options =>
                 options.UseMySql(
                     connectionString,
-                    new MySqlServerVersion(new Version(8,0,11,0)), // <-- ajusta conforme tua versão do MySQL
+                    new MySqlServerVersion(new Version(8, 0, 11, 0)),
                     b => b.MigrationsAssembly("SalesWebMvc")
                 )
             );
 
-            // Add services to the container.
+            //Aqui injeta o SeedingService na DI
+            builder.Services.AddScoped<SeedingService>();
+
+            //Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var seedingService = services.GetRequiredService<SeedingService>();
+                seedingService.Seed(); // Executa a rotina de seeding
+            }
 
-            // Configure the HTTP request pipeline.
+            // Opcional: chama o seeding automático ao iniciar (se quiser popular o banco)
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //var services = scope.ServiceProvider;
+            //var seedingService = services.GetRequiredService<SeedingService>();
+            //seedingService.Seed(); // <-- executa a rotina de seed
+            //}
+
+            //Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
