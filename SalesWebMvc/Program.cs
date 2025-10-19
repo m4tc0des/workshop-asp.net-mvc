@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 
 namespace SalesWebMvc
 {
@@ -10,40 +11,38 @@ namespace SalesWebMvc
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Configura a string de conexão
             var connectionString = builder.Configuration.GetConnectionString("SalesWebMvcContext")
                 ?? throw new InvalidOperationException("Connection string 'SalesWebMvcContext' not found.");
 
+            // Configura o DbContext com MySQL
             builder.Services.AddDbContext<SalesWebMvcContext>(options =>
                 options.UseMySql(
                     connectionString,
-                    new MySqlServerVersion(new Version(8, 0, 11, 0)),
+                    new MySqlServerVersion(new Version(8, 0, 11)),
                     b => b.MigrationsAssembly("SalesWebMvc")
                 )
             );
 
-            //Aqui injeta o SeedingService na DI
+            // ✅ Injeta os serviços ANTES de builder.Build()
             builder.Services.AddScoped<SeedingService>();
+            builder.Services.AddScoped<SellerService>();
 
-            //Add services to the container.
+            // Adiciona suporte a controllers com views
             builder.Services.AddControllersWithViews();
 
+            // Constrói o app
             var app = builder.Build();
+
+            // Executa o seeding (só insere dados se o banco estiver vazio)
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var seedingService = services.GetRequiredService<SeedingService>();
-                seedingService.Seed(); // Executa a rotina de seeding
+                seedingService.Seed();
             }
 
-            // Opcional: chama o seeding automático ao iniciar (se quiser popular o banco)
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //var services = scope.ServiceProvider;
-            //var seedingService = services.GetRequiredService<SeedingService>();
-            //seedingService.Seed(); // <-- executa a rotina de seed
-            //}
-
-            //Configure the HTTP request pipeline.
+            // Configura o pipeline de requisição HTTP
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
