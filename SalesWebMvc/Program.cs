@@ -24,9 +24,10 @@ namespace SalesWebMvc
                 )
             );
 
-            // ✅ Injeta os serviços ANTES de builder.Build()
+            // Injeta os serviços ANTES de builder.Build()
             builder.Services.AddScoped<SeedingService>();
             builder.Services.AddScoped<SellerService>();
+            builder.Services.AddScoped<DepartmentService>();
 
             // Adiciona suporte a controllers com views
             builder.Services.AddControllersWithViews();
