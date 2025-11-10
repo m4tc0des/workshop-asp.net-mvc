@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebMvc.Data;
 using SalesWebMvc.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace SalesWebMvc
 {
@@ -14,6 +16,15 @@ namespace SalesWebMvc
             // Configura a string de conexão
             var connectionString = builder.Configuration.GetConnectionString("SalesWebMvcContext")
                 ?? throw new InvalidOperationException("Connection string 'SalesWebMvcContext' not found.");
+            var enUS = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUS),
+                SupportedCultures = new List<CultureInfo> { enUS },
+                SupportedUICultures = new List<CultureInfo> { enUS },
+                
+            };
+            
 
             // Configura o DbContext com MySQL
             builder.Services.AddDbContext<SalesWebMvcContext>(options =>
@@ -34,6 +45,7 @@ namespace SalesWebMvc
 
             // Constrói o app
             var app = builder.Build();
+            app.UseRequestLocalization(localizationOptions);
 
             // Executa o seeding (só insere dados se o banco estiver vazio)
             using (var scope = app.Services.CreateScope())
