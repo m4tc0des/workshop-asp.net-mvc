@@ -30,7 +30,7 @@ namespace SalesWebMvc.Data
             Seller s2 = new Seller(2, "Jessie Pinkman", "jessie@gmail.com", new DateTime(1984, 9, 24), 1500.0, d2);
             Seller s3 = new Seller(3, "Hank Schrader", "hank@gmail.com", new DateTime(1963, 4, 08), 2000.0, d3);
             Seller s4 = new Seller(4, "Gustavo Fring", "gustavo@gmail.com", new DateTime(1958, 4, 26), 2500.0, d3);
-            Seller s5 = new Seller(5, "Mike Ehrmantraut", ",ole@gmail.com", new DateTime(1947, 1, 31), 3000.0, d3);
+            Seller s5 = new Seller(5, "Mike Ehrmantraut", "ole@gmail.com", new DateTime(1947, 1, 31), 3000.0, d3);
             Seller s6 = new Seller(6, "Saul Goodman", "saul@gmail.com", new DateTime(1960, 11, 12), 3500.0, d4);
 
             //Adiciona vendas
