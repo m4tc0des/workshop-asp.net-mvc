@@ -7,21 +7,29 @@ namespace SalesWebMvc.Models.Entities
 {
     public class Seller
     {
+        
         public int Id { get; set; }
+        [Required]
+        [StringLength(60, MinimumLength = 5, ErrorMessage ="{0} size should be between 5 and 60 characters. Check.")]
         public string Name { get; set; }
 
+        [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime BirthDate { get; set; }
 
+        [Required]
+        [Range(100.00, 50000.00, ErrorMessage ="{must be from {1} to {2}")]
         [Display(Name = "Base Salary")]
         [DisplayFormat(DataFormatString ="{0:f2}")]
 
         public double BaseSalary { get; set; }
+        [Required]
         public Department Department { get; set;}
         public int DepartmentId { get; set; }
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
