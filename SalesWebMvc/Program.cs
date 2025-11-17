@@ -39,6 +39,7 @@ namespace SalesWebMvc
             builder.Services.AddScoped<SeedingService>();
             builder.Services.AddScoped<SellerService>();
             builder.Services.AddScoped<DepartmentService>();
+            builder.Services.AddScoped<SalesRecordService>();
 
             // Adiciona suporte a controllers com views
             builder.Services.AddControllersWithViews();
