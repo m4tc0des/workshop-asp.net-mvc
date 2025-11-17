@@ -24,7 +24,7 @@ namespace SalesWebMvc.Models.Entities
         public DateTime BirthDate { get; set; }
 
         [Required]
-        [Range(100.00, 50000.00, ErrorMessage ="{must be from {1} to {2}")]
+        [Range(100.00, 50000.00, ErrorMessage = "Base Salary must be between {1} and {2}")]
         [Display(Name = "Base Salary")]
         [DisplayFormat(DataFormatString ="{0:f2}")]
 
